@@ -1,11 +1,9 @@
-import './App.css';
+import React from 'react'
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      RBAC UI System
-    </div>
-  );
+    <div>App</div>
+  )
 }
 
-export default App;
+export default App
