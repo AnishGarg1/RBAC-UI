@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { login } from '../../service/apiUtils/authAPIs'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
+import { login } from '../../services/apiUtils/authAPI';
 
-const Login = () => {
+const LoginForm = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -82,4 +82,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default LoginForm

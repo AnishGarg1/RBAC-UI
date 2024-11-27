@@ -35,7 +35,7 @@ exports.auth = async (req, res, next) => {
 //isReader
 exports.isReader = async (req, res, next) => {
   try{
-      if(req.user.accountType !== "Reader"){
+      if(req.user.role !== "Reader"){
           return res.status(401).json({
               success:false,
               message:"This is a protected route for Readers only",
@@ -54,7 +54,7 @@ exports.isReader = async (req, res, next) => {
 //isAuthor
 exports.isAuthor = async (req, res, next) => {
   try{
-      if(req.user.accountType !== "Author"){
+      if(req.user.role !== "Author"){
           return res.status(401).json({
               success:false,
               message:"This is a protected route for Author only",
@@ -73,7 +73,7 @@ exports.isAuthor = async (req, res, next) => {
 //isAdmin
 exports.isAdmin = async (req, res, next) => {
   try{
-      if(req.user.accountType !== "Admin"){
+      if(req.user.role !== "Admin"){
           return res.status(401).json({
               success:false,
               message:"This is a protected route for Admin only",

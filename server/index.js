@@ -7,6 +7,7 @@ const cors = require("cors");
 
 const userRoutes = require("./routes/User");
 const blogRoutes = require("./routes/Blog");
+const adminRoutes = require("./routes/Admin");
 
 // Connection with Dtaabase
 database.dbConnect();
@@ -27,6 +28,7 @@ const PORT = process.env.PORT || 4000;
 // routes
 app.use("/api/v1/auth", userRoutes);
 app.use("/api/v1/blog", blogRoutes);
+app.use("/api/v1/admin", adminRoutes);
 
 app.get("/", (req, res) => {
     res.send("Role Based Access Control - UI");

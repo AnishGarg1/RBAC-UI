@@ -14,23 +14,22 @@ exports.createBlog = async (req, res) => {
       });
     }
     
-    // check for instructor
+    // check for author
     const user = await User.findById(userId, {
         role: "Author",
     });
-
+    
     if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: "User not found",
-      });
+        return res.status(404).json({
+            success: false,
+            message: "User not found",
+        });
     }
-
+    
     const blog = new Blog({
-      user: user._id,
+      author: user._id,
       title,
       description,
-      status: "In Progress",
     });
 
     const createdBlog = await blog.save();
@@ -115,9 +114,9 @@ exports.getBlogDetails = async (req, res) => {
             });
         }
 
-        const blog = await Blog.findById(blogId).populate({path: "user"});
+        const blog = await Blog.findById(blogId).populate({path: "author"});
 
-        blog.user.password = undefined;
+        blog.author.password = undefined;
 
         if(!blog){
             return res.status(404).json({
@@ -135,18 +134,54 @@ exports.getBlogDetails = async (req, res) => {
         console.log("Error:", error);
         return res.status(500).json({
             success: false,
+            error,
             message: "Internal server error, try again",
         });
     }
 }
 
+// get all blogs by a specific author (authorId from request body)
+exports.getAllAuthorBlogs = async (req, res) => {
+    try {
+      const { authorId } = req.body;  // Get authorId from request body
+  
+      if (!authorId) {
+        return res.status(400).json({
+          success: false,
+          message: "Author ID is required",
+        });
+      }
+  
+      const allBlogs = await Blog.find({ author: authorId })
+        .sort({ createdAt: 1 })
+        .populate("author", "firstName lastName")
+        .exec();
+  
+      if (!allBlogs.length) {
+        return res.status(404).json({
+          success: false,
+          message: "No blogs found for this author",
+        });
+      }
+  
+      return res.status(200).json({
+        success: true,
+        allBlogs,
+        message: "All blogs fetched successfully",
+      });
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: "Internal server error, try again",
+      });
+    }
+};
+  
+
 // get user's all blog
 exports.getAllBlogDetails = async (req, res) => {
   try {
-    const userId = req.user.id;
-
-    const allBlogs = await Blog.find({ user: userId }).sort({ createdAt: -1 });
-
+    const allBlogs = await Blog.find().sort({ createdAt: 1 }).populate("author", "firstName lastName").exec();
     return res.status(200).json({
       success: true,
       allBlogs,

@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast';
 import { FaRegCheckCircle } from "react-icons/fa";
-import { signup } from '../../service/apiUtils/authAPIs';
 import { useNavigate } from 'react-router-dom';
+import { signup } from '../../services/apiUtils/authAPI';
 
-const Signup = () => {
+const SignupForm = () => {
   const [formData, setFormData] = useState({
-    username: "",
     firstName: "",
     lastName: "",
     email: "",
     password: "",
     confirmPassword: "",
+    role: "Reader", // Default role is "Reader"
   });
 
   const navigate = useNavigate();
 
   const [isPassMatch, setIsPassMatch] = useState(false);
 
-  const { username, firstName, lastName, email, password, confirmPassword } = formData;
+  const { firstName, lastName, email, password, confirmPassword, role } = formData;
 
   const handleChangeForm = (e) => {
     setFormData((prevData) => ({
@@ -35,11 +35,11 @@ const Signup = () => {
       return;
     }
     await signup(
-      username,
       firstName,
       lastName,
       email,
       password,
+      role, // Include role in the signup API request
       navigate,
     );
   }
@@ -51,8 +51,7 @@ const Signup = () => {
     else{
       setIsPassMatch(false);
     }
-  }, [password, confirmPassword])
-  
+  }, [password, confirmPassword]);
 
   return (
     <div className='flex items-center justify-center mt-10'>
@@ -60,49 +59,28 @@ const Signup = () => {
         <h2 className='text-2xl font-semibold mb-4 text-center'>
           Create Your Account
         </h2>
-        <form
-          onSubmit={handleSubmit}
-        >
+        <form onSubmit={handleSubmit}>
           <div className='space-y-4'>
-            <div>
-              <label
-                htmlFor='username'
-                className='block text-sm font-medium text-gray-700'
-              >
-                Username
-              </label>
-              <input
-                required
-                type='text'
-                id='username'
-                name='username'
-                value={username}
-                className='border-2 w-full px-3 py-2 rounded-lg focus:outline-none focus:border-blue-500'
-                placeholder='Enter username'
-                onChange={handleChangeForm}
-              />
-            </div>
-
             <div className='grid grid-cols-2 gap-4'>
               <div>
-                  <label
-                    htmlFor='firstName'
-                    className='block text-sm font-medium text-gray-700'
-                  >
-                    First Name
-                  </label>
-                  <input
-                    required
-                    type='text'
-                    id='firstName'
-                    name='firstName'
-                    value={firstName}
-                    className='border-2 w-full px-3 py-2 rounded-lg focus:outline-none focus:border-blue-500'
-                    placeholder='Enter first name'
-                    onChange={handleChangeForm}
-                  />
+                <label
+                  htmlFor='firstName'
+                  className='block text-sm font-medium text-gray-700'
+                >
+                  First Name
+                </label>
+                <input
+                  required
+                  type='text'
+                  id='firstName'
+                  name='firstName'
+                  value={firstName}
+                  className='border-2 w-full px-3 py-2 rounded-lg focus:outline-none focus:border-blue-500'
+                  placeholder='Enter first name'
+                  onChange={handleChangeForm}
+                />
               </div>
-              
+
               <div>
                 <label
                   htmlFor='lastName'
@@ -130,18 +108,18 @@ const Signup = () => {
               >
                 Email
               </label>
-                <input
-                  required
-                  type='email'
-                  id='email'
-                  name='email'
-                  value={email}
-                  className='border-2 w-full px-3 py-2 rounded-lg focus:outline-none focus:border-blue-500'
-                  placeholder='Enter email'
-                  onChange={handleChangeForm}
-                />
+              <input
+                required
+                type='email'
+                id='email'
+                name='email'
+                value={email}
+                className='border-2 w-full px-3 py-2 rounded-lg focus:outline-none focus:border-blue-500'
+                placeholder='Enter email'
+                onChange={handleChangeForm}
+              />
             </div>
-            
+
             <div>
               <label
                 htmlFor='password'
@@ -167,7 +145,7 @@ const Signup = () => {
                   htmlFor='confirmPassword'
                   className='block text-sm font-medium text-gray-700'
                 >
-                  Confrim Password
+                  Confirm Password
                 </label>
                 {isPassMatch && (
                   <div className='mr-1'>
@@ -186,7 +164,26 @@ const Signup = () => {
                 placeholder='Enter confirm password'
                 onChange={handleChangeForm}
               />
-            
+            </div>
+
+            {/* Role selection */}
+            <div>
+              <label
+                htmlFor='role'
+                className='block text-sm font-medium text-gray-700'
+              >
+                Role
+              </label>
+              <select
+                id='role'
+                name='role'
+                value={role}
+                onChange={handleChangeForm}
+                className='border-2 w-full px-3 py-2 rounded-lg focus:outline-none focus:border-blue-500'
+              >
+                <option value="Reader">Reader</option>
+                <option value="Author">Author</option>
+              </select>
             </div>
 
             <div>
@@ -199,9 +196,9 @@ const Signup = () => {
             </div>
           </div>
         </form>
-        </div>
+      </div>
     </div>
-  )
+  );
 }
 
-export default Signup;
+export default SignupForm;

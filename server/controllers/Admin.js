@@ -60,8 +60,8 @@ exports.switchUserRole = async (req, res) => {
   }
 };
 
-// Deactivate (remove) a user
-exports.deactivateUser = async (req, res) => {
+// Delete (remove) a user
+exports.deleteUser = async (req, res) => {
   try {
     const { userId } = req.body;
 
@@ -72,7 +72,7 @@ exports.deactivateUser = async (req, res) => {
       });
     }
 
-    // Find and deactivate the user
+    // Find and delete the user
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({
@@ -82,11 +82,12 @@ exports.deactivateUser = async (req, res) => {
     }
 
     user.active = false;
-    await user.save();
+    // await user.save();
+    await User.findByIdAndDelete(userId);
 
     return res.status(200).json({
       success: true,
-      message: "User deactivated successfully",
+      message: "User deleted successfully",
     });
   } catch (error) {
     console.log("Error:", error);
@@ -100,7 +101,7 @@ exports.deactivateUser = async (req, res) => {
 // Fetch all blogs of all users (for admin to manage content)
 exports.getAllBlogs = async (req, res) => {
   try {
-    const blogs = await Blog.find().populate("author");
+    const blogs = await Blog.find().populate("author", "firstName lastName");
     return res.status(200).json({
       success: true,
       blogs,

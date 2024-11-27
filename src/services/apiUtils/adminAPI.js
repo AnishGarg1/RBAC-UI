@@ -7,7 +7,7 @@ import { setUsersList } from "../../redux/slices/userSlice";
 const {
   GET_ALL_USERS_API,
   SWITCH_USER_ROLE_API,
-  DEACTIVATE_USER_API,
+  DELETE_USER_API,
   GET_ALL_BLOGS_API,
   DELETE_BLOG_BY_ADMIN_API,
 } = adminEndpoints;
@@ -31,7 +31,7 @@ export const getAllUsers = async (token, dispatch) => {
       toast.error(response?.data?.message);
       throw new Error("Error");
     }
-    result = response.data.users;
+    result = response.data;
     dispatch(setUsersList(result));
     toast.success("Users fetched successfully");
   } catch (error) {
@@ -44,6 +44,7 @@ export const getAllUsers = async (token, dispatch) => {
 
 // Switch user role
 export const switchUserRole = async (userId, newRole, token) => {
+  let result = null;
   const toastId = toast.loading("Processing...");
   try {
     const response = await apiConnect(
@@ -63,22 +64,23 @@ export const switchUserRole = async (userId, newRole, token) => {
       toast.error(response?.data?.message);
       throw new Error("Error");
     }
+    result = response.data.user;
     toast.success("User role updated successfully");
-    return response.data.user;
   } catch (error) {
     console.log("SWITCH USER ROLE API ERROR:", error);
     toast.error("Something went wrong");
   }
   toast.dismiss(toastId);
+  return result;
 };
 
-// Deactivate a user
-export const deactivateUser = async (userId, token) => {
+// Delete a user
+export const deleteUser = async (userId, token) => {
   const toastId = toast.loading("Processing...");
   try {
     const response = await apiConnect(
       "POST",
-      DEACTIVATE_USER_API,
+      DELETE_USER_API,
       {
         userId,
       },
@@ -86,15 +88,15 @@ export const deactivateUser = async (userId, token) => {
         Authorization: `Bearer ${token}`,
       }
     );
-    console.log("DEACTIVATE USER API RESPONSE.....", response);
+    console.log("DELETE USER API RESPONSE.....", response);
 
     if (!response?.data?.success) {
       toast.error(response?.data?.message);
       throw new Error("Error");
     }
-    toast.success("User deactivated successfully");
+    toast.success("User deleted successfully");
   } catch (error) {
-    console.log("DEACTIVATE USER API ERROR:", error);
+    console.log("DELETE USER API ERROR:", error);
     toast.error("Something went wrong");
   }
   toast.dismiss(toastId);
