@@ -9,7 +9,7 @@ const ManageUsers = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterRole, setFilterRole] = useState("");
   const [modal, setModal] = useState({ isVisible: false, userId: null, newRole: "" });
-  const [deleteModal, setDeleteModal] = useState({ isVisible: false, userId: null, role: "" }); // New delete confirmation modal state
+  const [deleteModal, setDeleteModal] = useState({ isVisible: false, userId: null, role: "" });
   const { token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
@@ -36,18 +36,12 @@ const ManageUsers = () => {
     fetchUsers();
   }, [token, dispatch]);
 
-  // Handle Role Switch
   const handleSwitchRole = async () => {
     try {
       const { userId, newRole } = modal;
-
-      // Update the role to the opposite role
       const updatedRole = newRole === ROLE.AUTHOR ? ROLE.READER : ROLE.AUTHOR;
-
-      // Call the API to switch the role
       await switchUserRole(userId, updatedRole, token);
 
-      // Update the users state
       setUsers((prev) => {
         const updatedUsers = { ...prev };
         updatedUsers[updatedRole === ROLE.AUTHOR ? "readers" : "authors"] = updatedUsers[
@@ -58,7 +52,6 @@ const ManageUsers = () => {
         return updatedUsers;
       });
 
-      // Update the filtered users state
       setFilteredUsers((prev) => {
         const updatedFiltered = { ...prev };
         updatedFiltered[updatedRole === ROLE.AUTHOR ? "readers" : "authors"] = updatedFiltered[
@@ -69,36 +62,35 @@ const ManageUsers = () => {
         return updatedFiltered;
       });
 
-      setModal({ isVisible: false, userId: null, newRole: "" }); // Close modal
+      setModal({ isVisible: false, userId: null, newRole: "" });
     } catch (error) {
       console.error("Error switching role:", error);
     }
   };
 
-  // Handle Deletion (called after confirmation)
   const handleDeleteUser = async () => {
     try {
       const { userId, role } = deleteModal;
-
       await deleteUser(userId, token);
+
       setUsers((prev) => {
         const updatedUsers = { ...prev };
         updatedUsers[role] = updatedUsers[role].filter((user) => user._id !== userId);
         return updatedUsers;
       });
+
       setFilteredUsers((prev) => {
         const updatedFiltered = { ...prev };
         updatedFiltered[role] = updatedFiltered[role].filter((user) => user._id !== userId);
         return updatedFiltered;
       });
 
-      setDeleteModal({ isVisible: false, userId: null, role: "" }); // Close delete modal
+      setDeleteModal({ isVisible: false, userId: null, role: "" });
     } catch (error) {
       console.error("Error deleting user:", error);
     }
   };
 
-  // Memoize the handleSearchAndFilter function
   const handleSearchAndFilter = useCallback(() => {
     let filtered = { ...users };
     if (filterRole) {
@@ -116,35 +108,32 @@ const ManageUsers = () => {
     setFilteredUsers(filtered);
   }, [users, filterRole, searchQuery]);
 
-  // Handle Modal for Role Switch
   const openModal = (userId, currentRole) =>
     setModal({ isVisible: true, userId, newRole: currentRole === ROLE.AUTHOR ? ROLE.READER : ROLE.AUTHOR });
   const closeModal = () => setModal({ isVisible: false, userId: null, newRole: "" });
 
-  // Handle Delete Confirmation Modal
   const openDeleteModal = (userId, role) => setDeleteModal({ isVisible: true, userId, role });
   const closeDeleteModal = () => setDeleteModal({ isVisible: false, userId: null, role: "" });
 
-  // Re-run search/filter on query or role change
   useEffect(() => {
     handleSearchAndFilter();
   }, [searchQuery, filterRole, handleSearchAndFilter]);
 
   return (
-    <div className="p-6 container mx-auto">
-      <h1 className="text-3xl font-bold mb-6">Manage Users</h1>
-      
+    <div className="p-6 mt-10 container mx-auto bg-gray-50 rounded-lg shadow-lg">
+      <h1 className="text-4xl font-semibold mb-6 text-center text-blue-600">Manage Users</h1>
+
       {/* Search and Filter */}
-      <div className="flex space-x-4 mb-4">
+      <div className="flex space-x-4 mb-6 bg-white p-4 rounded-lg shadow-md">
         <input
           type="text"
           placeholder="Search by name"
-          className="border px-4 py-2 rounded w-full"
+          className="border px-4 py-2 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
         <select
-          className="border px-4 py-2 rounded"
+          className="border px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           value={filterRole}
           onChange={(e) => setFilterRole(e.target.value)}
         >
@@ -155,35 +144,35 @@ const ManageUsers = () => {
       </div>
 
       {/* User Table */}
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto shadow-lg rounded-lg">
         {filteredUsers.readers.length > 0 || filteredUsers.authors.length > 0 ? (
           <table className="table-auto w-full border-collapse border border-gray-200">
-            <thead>
-              <tr className="bg-gray-100">
-                <th className="px-4 py-2 border">Name</th>
-                <th className="px-4 py-2 border">Email</th>
-                <th className="px-4 py-2 border">Role</th>
-                <th className="px-4 py-2 border">Actions</th>
+            <thead className="bg-blue-100 text-blue-800">
+              <tr>
+                <th className="px-6 py-3 text-left">Name</th>
+                <th className="px-6 py-3 text-left">Email</th>
+                <th className="px-6 py-3 text-left">Role</th>
+                <th className="px-6 py-3 text-left">Actions</th>
               </tr>
             </thead>
             <tbody>
               {filteredUsers.readers.map((user) => (
-                <tr key={user._id} className="hover:bg-gray-50">
-                  <td className="px-4 py-2 border">{`${user.firstName} ${user.lastName}`}</td>
-                  <td className="px-4 py-2 border">{user.email}</td>
-                  <td className="px-4 py-2 border">{user.role}</td>
-                  <td className="px-4 py-2 border space-x-2">
+                <tr key={user._id} className="hover:bg-gray-50 transition duration-300">
+                  <td className="px-6 py-3">{`${user.firstName} ${user.lastName}`}</td>
+                  <td className="px-6 py-3">{user.email}</td>
+                  <td className="px-6 py-3">{user.role}</td>
+                  <td className="px-6 py-3 space-x-2">
                     <button
                       onClick={() =>
                         openModal(user._id, user.role === ROLE.AUTHOR ? ROLE.READER : ROLE.AUTHOR)
                       }
-                      className="bg-blue-500 text-white py-1 px-3 rounded-lg hover:bg-blue-600"
+                      className="bg-blue-500 text-white py-1 px-4 rounded-lg hover:bg-blue-600 transition duration-300"
                     >
                       Switch Role
                     </button>
                     <button
                       onClick={() => openDeleteModal(user._id, "readers")}
-                      className="bg-red-500 text-white py-1 px-3 rounded-lg hover:bg-red-600"
+                      className="bg-red-500 text-white py-1 px-4 rounded-lg hover:bg-red-600 transition duration-300"
                     >
                       Delete
                     </button>
@@ -191,22 +180,22 @@ const ManageUsers = () => {
                 </tr>
               ))}
               {filteredUsers.authors.map((user) => (
-                <tr key={user._id} className="hover:bg-gray-50">
-                  <td className="px-4 py-2 border">{`${user.firstName} ${user.lastName}`}</td>
-                  <td className="px-4 py-2 border">{user.email}</td>
-                  <td className="px-4 py-2 border">{user.role}</td>
-                  <td className="px-4 py-2 border space-x-2">
+                <tr key={user._id} className="hover:bg-gray-50 transition duration-300">
+                  <td className="px-6 py-3">{`${user.firstName} ${user.lastName}`}</td>
+                  <td className="px-6 py-3">{user.email}</td>
+                  <td className="px-6 py-3">{user.role}</td>
+                  <td className="px-6 py-3 space-x-2">
                     <button
                       onClick={() =>
                         openModal(user._id, user.role === ROLE.AUTHOR ? ROLE.READER : ROLE.AUTHOR)
                       }
-                      className="bg-blue-500 text-white py-1 px-3 rounded-lg hover:bg-blue-600"
+                      className="bg-blue-500 text-white py-1 px-4 rounded-lg hover:bg-blue-600 transition duration-300"
                     >
                       Switch Role
                     </button>
                     <button
                       onClick={() => openDeleteModal(user._id, "authors")}
-                      className="bg-red-500 text-white py-1 px-3 rounded-lg hover:bg-red-600"
+                      className="bg-red-500 text-white py-1 px-4 rounded-lg hover:bg-red-600 transition duration-300"
                     >
                       Delete
                     </button>
@@ -216,48 +205,59 @@ const ManageUsers = () => {
             </tbody>
           </table>
         ) : (
-          <p className="text-center text-gray-500">No users found.</p>
+          <p className="text-center text-gray-600 py-6">No users found.</p>
         )}
       </div>
 
-      {/* Role Switch Modal */}
+      {/* Modal for Role Switch */}
       {modal.isVisible && (
-        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h2 className="text-xl mb-4">Are you sure you want to switch this user's role?</h2>
-            <button
-              onClick={handleSwitchRole}
-              className="bg-blue-500 text-white py-2 px-4 rounded-lg mr-2"
-            >
-              Yes
-            </button>
-            <button
-              onClick={closeModal}
-              className="bg-gray-500 text-white py-2 px-4 rounded-lg"
-            >
-              No
-            </button>
+        <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+            <h2 className="text-2xl font-semibold mb-4 text-center">Switch User Role</h2>
+            <p className="text-center mb-4">
+              Are you sure you want to switch the role of this user to{" "}
+              {modal.newRole === ROLE.AUTHOR ? "Reader" : "Author"}?
+            </p>
+            <div className="flex justify-center space-x-4">
+              <button
+                onClick={handleSwitchRole}
+                className="bg-blue-500 text-white py-2 px-6 rounded-lg hover:bg-blue-600"
+              >
+                Confirm
+              </button>
+              <button
+                onClick={closeModal}
+                className="bg-gray-300 text-gray-700 py-2 px-6 rounded-lg hover:bg-gray-400"
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         </div>
       )}
 
-      {/* Delete Confirmation Modal */}
+      {/* Modal for Deleting User */}
       {deleteModal.isVisible && (
-        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h2 className="text-xl mb-4">Are you sure you want to delete this user?</h2>
-            <button
-              onClick={handleDeleteUser}
-              className="bg-red-500 text-white py-2 px-4 rounded-lg mr-2"
-            >
-              Yes
-            </button>
-            <button
-              onClick={closeDeleteModal}
-              className="bg-gray-500 text-white py-2 px-4 rounded-lg"
-            >
-              No
-            </button>
+        <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+            <h2 className="text-2xl font-semibold mb-4 text-center">Delete User</h2>
+            <p className="text-center mb-4">
+              Are you sure you want to delete this user? This action cannot be undone.
+            </p>
+            <div className="flex justify-center space-x-4">
+              <button
+                onClick={handleDeleteUser}
+                className="bg-red-500 text-white py-2 px-6 rounded-lg hover:bg-red-600"
+              >
+                Confirm
+              </button>
+              <button
+                onClick={closeDeleteModal}
+                className="bg-gray-300 text-gray-700 py-2 px-6 rounded-lg hover:bg-gray-400"
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         </div>
       )}

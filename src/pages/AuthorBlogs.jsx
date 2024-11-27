@@ -82,38 +82,38 @@ const AuthorBlogs = () => {
   };
 
   return (
-    <div className="p-6 container mx-auto bg-white rounded-lg shadow-md">
-      <h1 className="text-4xl font-bold text-center mb-6 text-blue-600">My Blogs</h1>
+    <div className="mt-10 p-8 container mx-auto bg-gradient-to-r from-blue-100 to-blue-200 rounded-xl shadow-lg">
+      <h1 className="text-5xl font-extrabold text-center mb-8 text-indigo-600">My Blogs</h1>
 
       {/* Create Blog Button */}
-      <div className="text-center mb-6">
+      <div className="text-center mb-8">
         <button
           onClick={() => setIsCreateModalOpen(true)}
-          className="bg-blue-500 text-white px-6 py-2 rounded-md shadow-md hover:bg-blue-600"
+          className="bg-indigo-500 text-white px-8 py-3 rounded-md shadow-xl hover:bg-indigo-600 transition-all duration-300"
         >
           Create Blog
         </button>
       </div>
 
       {/* Blog List */}
-      <div className="space-y-4">
+      <div className="space-y-6">
         {blogs.length === 0 ? (
-          <p className="text-center text-gray-500">No blogs available</p>
+          <p className="text-center text-gray-600 text-lg">No blogs available</p>
         ) : (
           blogs.map((blog) => (
-            <div key={blog._id} className="bg-gray-50 rounded-lg p-4 shadow-md">
-              <h2 className="text-xl font-semibold text-blue-700">{blog.title}</h2>
-                <p className="text-gray-600 text-sm mt-2">
-                    {blog?.description
-                        ? showDescription[blog._id]
-                        ? blog.description
-                        : `${blog.description.substring(0, 100)}...`
-                        : "No description"}
-                </p>
+            <div key={blog._id} className="bg-white mx-5 rounded-lg p-6 shadow-lg transition-all hover:shadow-2xl transform hover:scale-105">
+              <h2 className="text-2xl font-semibold text-indigo-700">{blog.title}</h2>
+              <p className="text-gray-600 text-sm mt-2">
+                {blog?.description
+                  ? showDescription[blog._id]
+                    ? blog.description
+                    : `${blog.description.substring(0, 100)}...`
+                  : "No description"}
+              </p>
 
               <button
                 onClick={() => handleShowDescription(blog._id)}
-                className="text-blue-500 text-sm mt-2 block"
+                className="text-indigo-500 text-sm mt-2 block hover:underline"
               >
                 {showDescription[blog._id] ? "Show Less" : "Show More"}
               </button>
@@ -124,16 +124,16 @@ const AuthorBlogs = () => {
               </p>
 
               {/* Action buttons */}
-              <div className="mt-4 flex space-x-4">
+              <div className="mt-6 flex space-x-6 justify-center">
                 <button
                   onClick={() => handleUpdateBlog(blog._id)}
-                  className="bg-green-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-green-600"
+                  className="bg-green-500 text-white px-6 py-2 rounded-md shadow-lg hover:bg-green-600 transition-all duration-300"
                 >
                   Update
                 </button>
                 <button
                   onClick={() => openModal(blog._id)}
-                  className="bg-red-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-red-600"
+                  className="bg-red-500 text-white px-6 py-2 rounded-md shadow-lg hover:bg-red-600 transition-all duration-300"
                 >
                   Delete
                 </button>
@@ -145,20 +145,20 @@ const AuthorBlogs = () => {
 
       {/* Modal for Confirming Deletion */}
       {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-10">
-          <div className="bg-white p-6 rounded-lg shadow-md w-1/3">
-            <h3 className="text-xl font-semibold text-gray-700 mb-4">Confirm Deletion</h3>
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-70 z-20">
+          <div className="bg-white p-8 rounded-lg shadow-xl w-1/3 transform transition-all scale-110">
+            <h3 className="text-2xl font-semibold text-gray-700 mb-4">Confirm Deletion</h3>
             <p className="text-gray-600 mb-6">Are you sure you want to delete this blog?</p>
-            <div className="flex justify-end space-x-4">
+            <div className="flex justify-end space-x-6">
               <button
                 onClick={closeModal}
-                className="bg-gray-300 text-gray-800 px-4 py-2 rounded-md"
+                className="bg-gray-300 text-gray-800 px-6 py-2 rounded-md hover:bg-gray-400 transition-all duration-300"
               >
                 Cancel
               </button>
               <button
                 onClick={handleDeleteBlog}
-                className="bg-red-500 text-white px-4 py-2 rounded-md"
+                className="bg-red-500 text-white px-6 py-2 rounded-md hover:bg-red-600 transition-all duration-300"
               >
                 Delete
               </button>
@@ -169,26 +169,26 @@ const AuthorBlogs = () => {
 
       {/* Modal for Creating a Blog */}
       {isCreateModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-10">
-          <div className="bg-white p-6 rounded-lg shadow-md w-1/3">
-            <h3 className="text-xl font-semibold text-gray-700 mb-4">Create a New Blog</h3>
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-70 z-20">
+          <div className="bg-white p-8 rounded-lg shadow-xl w-1/3">
+            <h3 className="text-2xl font-semibold text-gray-700 mb-6">Create a New Blog</h3>
             <input
               type="text"
               value={blogTitle}
               onChange={(e) => setBlogTitle(e.target.value)}
               placeholder="Enter blog title"
-              className="w-full p-2 border rounded-md mb-4"
+              className="w-full p-3 border rounded-md mb-6 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-300"
             />
-            <div className="flex justify-end space-x-4">
+            <div className="flex justify-end space-x-6">
               <button
                 onClick={() => setIsCreateModalOpen(false)}
-                className="bg-gray-300 text-gray-800 px-4 py-2 rounded-md"
+                className="bg-gray-300 text-gray-800 px-6 py-2 rounded-md hover:bg-gray-400 transition-all duration-300"
               >
                 Cancel
               </button>
               <button
                 onClick={handleCreateBlog}
-                className="bg-blue-500 text-white px-4 py-2 rounded-md"
+                className="bg-indigo-500 text-white px-6 py-2 rounded-md hover:bg-indigo-600 transition-all duration-300"
               >
                 Create
               </button>

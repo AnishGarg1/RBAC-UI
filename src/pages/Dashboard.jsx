@@ -19,19 +19,19 @@ const Dashboard = () => {
   }, [dispatch]);
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="container mt-10 mx-auto p-8 bg-gradient-to-br from-blue-50 via-indigo-100 to-blue-200 rounded-lg shadow-xl">
       {/* Welcome Section */}
-      <div className="mb-8 p-6 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg shadow-lg">
-        <h1 className="text-4xl font-bold mb-2">Welcome, {user?.firstName}!</h1>
-        <p className="text-lg mb-4">We're glad to have you on board. Here's what's happening in your dashboard:</p>
+      <div className="mb-8 mx-5 p-8 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg shadow-lg transform hover:scale-105 transition-all duration-300">
+        <h1 className="text-4xl font-extrabold mb-2 text-shadow">Welcome, {user?.firstName}!</h1>
+        <p className="text-lg mb-4 font-medium">We're glad to have you on board. Here's what's happening in your dashboard:</p>
         <div className="flex items-center space-x-4">
-          <span className="text-xl">Role: <span className="font-semibold">{user?.role}</span></span>
+          <span className="text-xl font-semibold">Role: <span className="font-semibold">{user?.role}</span></span>
         </div>
       </div>
 
       {/* Blogs Section */}
-      <h2 className="text-3xl font-bold mb-6 text-gray-800">Latest Blogs</h2>
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <h2 className="text-3xl font-bold mb-6 text-gray-800 text-center">Latest Blogs</h2>
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {blogs.length > 0 ? (
           blogs.map((blog) => (
             <BlogCard key={blog._id} blog={blog} />

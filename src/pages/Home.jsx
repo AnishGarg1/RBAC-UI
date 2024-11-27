@@ -27,18 +27,18 @@ const Home = () => {
   const blogsToDisplay = showAll ? blogs : blogs.slice(0, 5); // Display first 5 blogs if `showAll` is false
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-6">Welcome to Our Blog</h1>
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+    <div className="container mx-auto p-8">
+      <h1 className="text-4xl font-extrabold text-center mb-8 text-shadow-md">Welcome to Our Blog</h1>
+      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
         {blogsToDisplay.map((blog) => (
           <BlogCard key={blog.id} blog={blog} />
         ))}
       </div>
       {!showAll && (
-        <div className="text-center mt-6">
+        <div className="text-center mt-8">
           <button
             onClick={handleShowMore}
-            className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600"
+            className="bg-blue-600 text-white py-3 px-6 rounded-full text-lg shadow-lg transition-all duration-300 hover:bg-blue-500 hover:scale-105"
           >
             Show More
           </button>
