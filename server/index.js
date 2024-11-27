@@ -18,7 +18,7 @@ dotenv.config(); // parsing .env file variables
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-    origin: ["http://localhost:3000", "*"],
+    origin: ["http://localhost:3000", "https://accessly.netlify.app"],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
 }));
