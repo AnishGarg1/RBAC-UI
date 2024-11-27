@@ -129,21 +129,17 @@ Make sure you have the following installed:
 ### Step 1: Clone the repository
 
 ```bash
-git clone https://github.com/your-username/blog-access-control-system.git
-cd blog-access-control-system
+git clone https://github.com/AnishGarg1/RBAC-UI.git
+cd RBAC-UI
 ```
 
 ### Step 2: Install dependencies
 
+Run the following command in the project root directory to install all dependencies for both frontend and backend:
+
 #### Frontend Setup:
 
-1. Navigate to the `src` directory:
-
-```bash
-cd src
-```
-
-2. Install frontend dependencies:
+1. Install frontend dependencies:
 
 ```bash
 npm install
@@ -172,7 +168,7 @@ npm install
 ```env
 MONGO_URI=mongodb://your-mongo-db-uri
 JWT_SECRET=your-jwt-secret-key
-PORT=5000
+PORT=4000
 ```
 
 2. **Admin Credentials for Demo**:
@@ -189,24 +185,18 @@ To log in as an **Admin** for testing, use the following credentials:
 1. For the **client**, create a `.env` file and add the following to store the API server URL:
 
 ```env
-REACT_APP_API_URL=http://localhost:5000
+REACT_APP_API_URL=http://localhost:4000/api/v1
 ```
 
 ### Step 4: Run the Application
 
-1. Start the backend server:
+To run both the client and server simultaneously, run the following command from the root folder:
 
 ```bash
-cd server
-npm start
+npm run dev
 ```
 
-2. Start the frontend development server:
-
-```bash
-cd src
-npm start
-```
+This will start both the backend server and the frontend React development server.
 
 Visit `http://localhost:3000` to access the application in your browser.
 
@@ -241,43 +231,54 @@ Visit `http://localhost:3000` to access the application in your browser.
 ## Folder Structure
 
 ```
-blog-access-control-system/
+your-project/
 │
-├── src/                   # Frontend (React.js)
-│   ├── components/        # React components (BlogCard, BlogPage, etc.)
-│   ├── pages/             # Pages (Home, CreateBlog, etc.)
-│   ├── services/          # Axios API utility files
-│   ├── store/             # Redux store (user auth, blog data)
-│   │   └── App.js         # Main React entry point
-│   └── package.json       # Frontend dependencies
+├── /node_modules            # Node.js modules (for both client and server)
+├── /public                  # Static assets (index.html, images, etc.)
+├── /client                  # React client-side source code
+│   ├── /assets              # Static files like images, icons, etc.
+│   ├── /components          # Reusable UI components
+│   │   ├── /Admin           # Admin-related components (e.g., ManageUsers.jsx)
+│   │   └── /Common          # Common components (e.g., Header, Footer, Modal, etc.)
+│   ├── /hooks               # Custom React hooks (e.g., useAuth, useFetch)
+│   ├── /redux               # Redux files
+│   │   ├── /features        # Redux slices for different features (e.g., usersSlice)
+│   │   ├── /store.js        # Store configuration
+│   ├── /services            # Services for API calls
+│   │   ├── /adminAPI.js     # API utilities (e.g., getAllUsers, switchUserRole, etc.)
+│   ├── /utils               # Utility functions and constants
+│   ├── /views               # Views or pages (e.g., Dashboard, Profile)
+│   ├── App.jsx              # Main app component
+│   ├── index.js             # React entry point
 │
-├── server/                # Backend (Node.js, Express.js)
-│   ├── controllers/       # Controller functions (auth, blogs, users)
-│   ├── models/            # Mongoose models (Blog, User, etc.)
-│   ├── routes/            # Express routes (auth, blogs, users)
-│   ├── middleware/        # JWT & Role-based access middleware
-│   ├── server.js          # Backend entry point
-│   └── package.json       # Backend dependencies
+├── /server                  # Backend Node.js API
+│   ├── /controllers         # Express controllers for handling routes (e.g., userController.js)
+│   ├── /middlewares         # Custom Express middlewares (e.g., authMiddleware.js)
+│   ├── /models              # MongoDB models (e.g., User.js)
+│   ├── /routes              # Express routes (e.g., userRoutes.js)
+│   ├── /services            # Backend services (e.g., userService.js)
+│   ├── /utils               # Utility functions (e.g., token generation, password hashing)
+│   ├── /config              # Configuration files (e.g., database.js, keys.js)
+│   ├── server.js            # Main backend entry point
 │
-├── .env                   # Environment variables (MongoDB URI, JWT secret) - for the backend
-├── package.json           # Project dependencies
-├── .env                   # Client-side environment variable (API URL)
-├── public/                # Public assets (icons, images)
-├── package-lock.json      # Lock file for dependencies
-└── README.md              # Project documentation
+├── .env                     # Environment
+
+ variables for backend
+├── package.json             # Project dependencies and scripts
+└── README.md                # Project documentation
 ```
 
 ---
 
 ## Future Enhancements
 
-- **User Permissions**: Implement more granular permissions for roles.
-- **Commenting System**: Allow users to comment on blog posts.
-- **Advanced Admin Dashboard**: Add advanced admin functionalities such as analytics or content moderation tools.
-- **Rich Text Editor**: Provide a rich text editor for blog post creation.
+- **Email Notifications**: Implement email notifications for user registration and password resets.
+- **Testing**: Add unit and integration tests for both frontend and backend.
+- **Role Management**: Allow more customizable roles for users (e.g., Editor, Contributor).
+- **Blog Categories**: Implement blog categories to organize blog posts.
 
 ---
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License.
